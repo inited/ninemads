@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hra:HomeBase xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:hra="hra.*" added="homebase1_addedHandler(event)" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="GPS Sender" actionBarVisible="false">
+	
+	<fx:Script>
+		<![CDATA[
+			protected function homebase1_addedHandler(event:Event):void
+			{
+				// TODO Auto-generated method stub
+				navigator.getClassStyleDeclarations();
+				model.mNavigator = navigator;
+			}
+		]]>
+	</fx:Script>
+	
+	<s:Scroller id="scMain" width="100%" height="100%" verticalScrollPolicy="off" horizontalScrollPolicy="off">
+		<s:VGroup  width="100%" height="100%" paddingTop="20" paddingLeft="20" paddingRight="20" verticalAlign="top" horizontalAlign="center" includeInLayout="false">
+	
+			<s:HGroup width="100%" height="100" verticalAlign="middle" includeInLayout="{model.logged}" visible="{model.logged}">
+				<s:Image width="100" height="100" source="{model.res.imgLogoGold}" smooth="false" smoothingQuality="high" />
+				<s:Label width="50%" textAlign="left" text="{model.fullName}" styleName="homeLoggedUser" />
+				<s:Label width="50%" textAlign="right" text="{model.creditMsg}" styleName="homeCredit" />				
+			</s:HGroup>
+			<s:HGroup width="100%" height="100" verticalAlign="middle" includeInLayout="{!model.logged}" visible="{!model.logged}">
+				<s:Image width="100" height="100" source="{model.res.imgLogoGold}" />
+				<s:Button height="10%" skinClass="skins.buttons.buttonEmpty" label="PŘIHLÁSIT SE&#xA;REGISTRACE" click="goLogin()" visible="{!model.logged}" includeInLayout="{!model.logged}"/>			
+			</s:HGroup>
+
+			<s:Button width="60%" height="15%" skinClass="skins.buttons.buttonGold" visible="{!model.logged}" includeInLayout="{!model.logged}" label="VYZKOUŠEJ !" click="goTry()" />
+			<s:Spacer width="10"  height="10%" includeInLayout="{!model.logged}" />
+			<s:Button width="60%" height="15%" skinClass="skins.buttons.buttonGold" label="HRAJ !&#xA;o {model.gameCreditMsg} EUR" click="goPlay()"/>
+			<s:Spacer width="10"  height="10%" />
+			<s:Button width="60%" height="10%" skinClass="skins.buttons.buttonGold" label="VSAĎ SE !" click="goNewBid()"/>
+			<s:HGroup width="100%" height="10%">
+				<s:Label text="" width="20%" />
+				<s:Button width="60%" height="100%" skinClass="skins.buttons.buttonGold" label="SÁZKY" click="goMyBids()"/>
+				<s:Label width="20%" text="({model.activeBets})" visible="{model.logged}" includeInLayout="{model.logged}"/>
+			</s:HGroup>
+
+			
+<!--
+			<s:Spacer width="10"  height="10%" />
+			<s:Label text="{model.verzeApp}" color="0xDDDDDD" />
+			-->
+			<s:Button width="60%" height="15%" skinClass="skins.buttons.buttonGold" visible="{model.logged}" includeInLayout="{model.logged}" label="VYZKOUŠEJ !" click="goTry()" />
+			<s:Spacer width="10"  height="10%" includeInLayout="{model.logged}" />
+			
+			<s:Image width="200" height="67" fillMode="scale" verticalAlign="bottom" source="{model.res.imgSocial}"/>
+		</s:VGroup>			
+	</s:Scroller>
+</hra:HomeBase>

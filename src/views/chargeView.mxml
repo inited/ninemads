@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009"
+		backgroundColor="0x212121"
+		xmlns:s="library://ns.adobe.com/flex/spark" title="GPS Sender" actionBarVisible="false">
+	
+
+	<fx:Script>
+		<![CDATA[
+			import hra.Model;
+			
+			import mx.core.mx_internal;
+			import mx.events.ItemClickEvent;
+			
+			[Bindable]
+			protected var samount:String = "20";
+			
+			public var model:Model = Model.getInstance();
+			
+			protected function group_itemClickHandler(event:ItemClickEvent):void
+			{
+				var s:String = event.label; 
+				var sa:Array = s.split(" ");
+				samount = sa[0];
+				trace(event.label);
+				
+			}
+			
+			
+			//goCharge() {navigator.pushView(charge1View)}
+			
+			protected function goCharge(event:MouseEvent):void
+			{
+//				navigator.pushView(charge1View, {amount:samount});
+				navigator.pushView(paypal);				
+			}
+
+			protected function goCharge2(event:MouseEvent):void
+			{
+				navigateToURL(new URLRequest("http://ninemads27.appspot.com/paypal.jsp?username=" + model.mRegistrace.username + "&kredit=" + samount ));
+//				var v:URLVariables = new URLVariables();
+//				model.apiCall("paypalLink", v, gotLink);
+				navigator.popView();
+			}
+			
+			protected function gotLink(res:Object):void {
+				
+//				navigateToURL(new URLRequest("https://www.sandbox.paypal.com/incontext?token=" + res.TOKEN));
+			}			
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<s:RadioButtonGroup id="group" itemClick="group_itemClickHandler(event)" />
+	</fx:Declarations>
+	
+	<s:Scroller id="scMain" width="100%" height="100%" verticalScrollPolicy="on" horizontalScrollPolicy="off">
+
+		<s:VGroup  width="100%" height="100%" paddingTop="20" verticalAlign="top" paddingLeft="20">
+			
+			<s:Label width="100%" textAlign="center" text="DOBÍJENÍ ÚČTU UŽIVATELE" />
+			<s:Label width="100%" textAlign="left" text="Zvolte prosím částku pro dobití:" />
+			
+			<s:VGroup paddingLeft="20">
+				<s:RadioButton groupName="group" label="500 EUR" />
+				<s:RadioButton groupName="group" label="200 EUR" />
+				<s:RadioButton groupName="group" label="100 EUR" />
+				<s:RadioButton groupName="group" label="50 EUR" />
+				<s:RadioButton groupName="group" label="20 EUR" selected="true" />
+				<s:RadioButton groupName="group" label="10 EUR" />
+				<s:RadioButton groupName="group" label="5 EUR" />
+				<s:RadioButton groupName="group" label="2 EUR" />
+				<s:RadioButton groupName="group" label="1 EUR" />
+			</s:VGroup>
+	
+			
+			<s:Label width="100%" textAlign="left" text="Z vašeho PayPal účtu bude odečtena částka {samount} EUR + DPH a poplatky." />
+	
+			<s:HGroup width="100%" horizontalAlign="center">
+<!--				
+				<s:Button width="40%" height="15%"  label="webView" click="goCharge(event)" skinClass="skins.buttons.buttonGold"/>
+-->				
+				<s:Button width="40%" height="15%"  label="Dobít" click="goCharge2(event)" skinClass="skins.buttons.buttonGold"/>
+				<s:Button width="40%" height="15%"  label="Zrušit" click="{navigator.popToFirstView()}" skinClass="skins.buttons.buttonGold"/>				
+			</s:HGroup>
+	
+			
+		</s:VGroup>
+	</s:Scroller>
+</s:View>

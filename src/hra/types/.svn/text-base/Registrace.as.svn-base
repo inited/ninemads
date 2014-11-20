@@ -1,0 +1,19 @@
+package forum.types
+{
+	public class Registrace extends Object
+	{
+		public var jmeno:String;
+		public var firma:String;
+		public var email:String;
+		public var telefon:String;
+
+		public var odeslano:String;
+		public var uid:String;
+		
+		
+		public function Registrace()
+		{
+			super();
+		}
+	}
+}

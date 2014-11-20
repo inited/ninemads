@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009"  creationComplete="init(event)"
+		backgroundColor="0x212121"
+		xmlns:s="library://ns.adobe.com/flex/spark" actionBarVisible="false">
+	
+	<fx:Script>
+		<![CDATA[
+			import hra.Model;
+			
+			import mx.collections.ArrayList;
+			import mx.core.IVisualElement;
+			import mx.events.FlexEvent;
+			import mx.events.TouchInteractionEvent;
+			
+			import spark.components.TabbedViewNavigator;
+			import spark.events.IndexChangeEvent;
+	
+			
+			[Bindable]
+			public var model:Model = Model.getInstance();
+			
+			[Bindable]
+			protected var hry:ArrayList;
+			
+			[Bindable]
+			protected var bets:ArrayList;
+		
+			protected function bbFiltr_changeHandler(event:IndexChangeEvent):void
+			{
+				trace("New index:" + event.newIndex);
+				if (event.newIndex == 0) {
+					vg1.visible = true;
+					vg1.includeInLayout = true;
+					vg2.visible = false;
+					vg2.includeInLayout = false;
+				} else {
+					vg1.visible = false;
+					vg1.includeInLayout = false;
+					vg2.visible = true;
+					vg2.includeInLayout = true;
+				}
+			}			
+			
+			
+			protected function gotGameResults(o:Object):void {
+				hry = new ArrayList(o.list);
+				trace(o);
+			}
+
+			protected function gotBetResults(o:Object):void {
+				bets = new ArrayList(o.list);
+				trace(o);
+			}
+			
+			
+			protected function init(event:FlexEvent):void
+			{
+				model.apiCall("gameList", null, gotGameResults);
+				model.apiCall("betList", null, gotBetResults);
+			}
+			
+			public function lblHry(item:Object):String {
+				var gameStart:String = item.gameStart;
+				var resultTime:String = item.resultTime;
+				return gameStart + "\t" + resultTime;
+			}
+
+			public function lblBets(item:Object):String {
+				var dateCreated:String = item.dateCreated;
+				var player1:String = item.player1;
+				var player2:String = item.player2;
+				var amount:String = item.amount;
+				return dateCreated + "\t" + player1 + "/" + player2 + "\t" + amount;
+			}
+
+			
+		]]>
+	</fx:Script>
+	
+	
+	<s:VGroup  width="100%" height="100%" paddingTop="0" verticalAlign="top">		
+		<s:ButtonBar width="100%" change="bbFiltr_changeHandler(event)" id="bbFiltr" selectedIndex="0" skinClass="skins.ButtonBarGold" requireSelection="true">
+			<s:ArrayCollection>
+				<fx:Object label="Hry"      value="{vg1}"  />
+				<fx:Object label="Sázky"    value="{vg2}"  />
+			</s:ArrayCollection>
+		</s:ButtonBar>	
+		
+		<s:HGroup  width="100%" height="100%" >
+			<s:VGroup id="vg1" width="{model.appWidth}" height="100%" paddingTop="10" paddingLeft="0">
+				<s:HGroup>
+					<s:Label width="200" text="Datum/čas" />
+					<s:Label width="200" text="Čas" />
+				</s:HGroup>
+
+				<s:List width="100%"  height="100%" id="li1" labelFunction="lblHry" dataProvider="{hry}" itemRenderer="components.CountryItemRenderer" > 
+					<s:layout>
+						<s:VerticalLayout gap="0"   />
+					</s:layout>
+				</s:List>													
+				
+			</s:VGroup>
+			<s:VGroup id="vg2" width="{model.appWidth}" height="100%" paddingTop="10" paddingLeft="0" includeInLayout="false" visible="false">
+				<s:HGroup>
+					<s:Label width="150" text="Datum/čas" />
+					<s:Label width="150" text="Soupeř" />
+					<s:Label width="150" text="Částka" />
+				</s:HGroup>
+				
+				
+				<s:List width="100%"  height="100%" id="li2" labelFunction="lblBets" dataProvider="{bets}" itemRenderer="components.CountryItemRenderer" > 
+					<s:layout>
+						<s:VerticalLayout gap="0"   />
+					</s:layout>
+				</s:List>							
+			</s:VGroup>
+		</s:HGroup>
+
+	</s:VGroup>
+	
+</s:View>

@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009"
+		backgroundColor="0x212121" creationComplete="init(event)"
+		xmlns:s="library://ns.adobe.com/flex/spark" title="GPS Sender" actionBarVisible="false">
+	
+
+	<fx:Script>
+		<![CDATA[
+			import hra.Model;
+			import hra.types.BetEvent;
+			
+			import mx.collections.ArrayList;
+			import mx.core.IVisualElement;
+			import mx.events.FlexEvent;
+			import mx.events.TouchInteractionEvent;
+			
+			import spark.events.IndexChangeEvent;
+	
+			
+			[Bindable]
+			public var model:Model = Model.getInstance();
+			
+			[Bindable]
+			protected var bets:ArrayCollection;
+			
+			protected var filtr:int = 0;
+			
+
+			protected function bbFiltr_changeHandler(event:IndexChangeEvent):void
+			{
+				filtr = event.newIndex;
+				// update collection
+				bets.refresh();
+			}
+						
+			protected function filterFunction(o:Object):Boolean {
+				switch(filtr) {
+					case 0:
+						if (o.status != "game1") return false;
+						return (o.player2 == model.mRegistrace.username);
+					case 1:
+						if (o.status != "game1") return false;
+						return (o.player1 == model.mRegistrace.username);
+					case 2:
+						return (o.status != "game1");
+				}
+				return true;
+			}
+
+			
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				navigator.pushView(gameIntroView, {gameMode:'game', gameAmount: "20", gamePartner:"Tonda"});
+				
+			}
+			
+			protected function init(event:FlexEvent):void
+			{
+				if (!model.logged) {
+					model.okno("Nejste přihlášeni","Pro vstup do sekce musíte být přihlášeni", true, false, false, function (e:Event):void {
+						//						TabbedViewNavigator(model.mNavigator.parentNavigator).selectedIndex = 0;
+						if (navigator == null) {
+							model.mNavigator.pushView(loginView);							
+						} else {
+							navigator.pushView(loginView);							
+						}
+					});
+					return;
+				}
+				
+				
+				model.apiCall("betList", null, gotBetResults);
+				li.addEventListener("betCancel", onBetCancel);
+				li.addEventListener("betAccept", onBetAccept);
+				li.addEventListener("betEdit",   onBetEdit);
+			}
+			
+			protected function gotBetResults(o:Object):void {
+				bets = new ArrayCollection(o.list);
+				bets.filterFunction = filterFunction;
+				bets.refresh();
+				trace(o);
+			}			
+
+			public function lblBets(item:Object):String {
+				var s:String = "";
+				if (filtr == 0) {
+					s = "Vyzval me: " + item.player1 + "\n" +
+						"Castka: " + item.amount + "\n";
+				}
+				if (filtr == 1) {
+					s = "Vyzval jsem: " + item.player2 + "\n" +
+						"Castka: " + item.amount + "\n" +
+						"Status: " + item.status + "\n";
+				}
+				if (filtr == 2) {
+					if (item.player1 == model.mRegistrace.username) {
+						s = "Vyzval jsem: " + item.player2 + "\n" +
+							"Castka: " + item.amount;
+					} else {
+						s = "Vyzval me: " + item.player1 + "\n" +
+							"Castka: " + item.amount;
+					}
+				}
+/*				
+				var dateCreated:String = item.dateCreated;
+				var player1:String = item.player1;
+				var player2:String = item.player2;
+				var amount:String = item.amount;
+				return dateCreated + "\t" + player1 + "/" + player2 + "\t" + amount;
+*/
+				return s;
+			}			
+			
+			public function onBetCancel(e:BetEvent):void {
+				var sid:String = e.param;
+				trace("onBetCancel:" + e.param);
+				model.okno("Otázka", "Opravdu chcete sázku odmítnout?", true, true, false);				
+				model.alertWindow.btOK.addEventListener(MouseEvent.CLICK, function (event:MouseEvent):void
+				{
+					model.alertWindow.btOK.removeEventListener(MouseEvent.CLICK, arguments.callee);
+
+					var v:URLVariables = new URLVariables();
+					v.betKey = sid; 
+					model.apiCall("betCancel", v, onBetCanceled);
+				});
+			}
+	
+			protected function onBetCanceled(res:Object):void {
+				trace("bet canceled:" + res.status);
+			}
+			
+			public function onBetAccept(e:BetEvent):void {
+				var sid:String = e.param;
+				trace("onBetAccept:" + e.param);
+				for(var i:int = 0;i<bets.length;i++) {
+					if (bets[i].id == sid) break;
+				}
+				navigator.pushView(gameIntroView, 
+					{
+						gameMode:'game', 
+						gameAmount: bets[i].amount, 
+						gamePartner:bets[i].player1,
+						betKey:bets[i].id
+					});
+
+			}
+
+			public function onBetEdit(e:BetEvent):void {
+				var sid:String = e.param;
+				trace("onBetEdit:" + e.param);
+				for(var i:int = 0;i<bets.length;i++) {
+					if (bets[i].id == sid) break;
+				}
+				navigator.pushView(betEdit,
+				{
+					gameAmount: bets[i].amount, 
+					gamePartner:bets[i].player1,
+					betKey:bets[i].id
+				});
+			}
+
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:VGroup  width="100%" height="100%" paddingTop="0" verticalAlign="top">
+		
+		<s:ButtonBar width="100%" change="bbFiltr_changeHandler(event)" id="bbFiltr" selectedIndex="0" requireSelection="true">
+			<s:ArrayCollection>
+				<fx:Object label="Příchozí"    value="0"  />
+				<fx:Object label="Odeslané"    value="1"  />
+				<fx:Object label="Ukončené"    value="2"  />
+			</s:ArrayCollection>
+		</s:ButtonBar>	
+		
+		
+		<s:HGroup>
+			<s:Label width="150" text="Datum/čas" />
+			<s:Label width="150" text="Soupeř" />
+			<s:Label width="150" text="Částka" />
+		</s:HGroup>
+		
+		
+		<s:List width="100%"  height="100%" id="li" labelFunction="lblBets" dataProvider="{bets}" itemRenderer="components.BetItemRenderer"> 
+			<s:layout>
+				<s:VerticalLayout gap="0"   />
+			</s:layout>
+		</s:List>
+	</s:VGroup>
+	
+</s:View>

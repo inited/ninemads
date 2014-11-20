@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" add="view1_addHandler(event)"
+		backgroundColor="0x212121"
+		xmlns:s="library://ns.adobe.com/flex/spark" title="GPS Sender" actionBarVisible="false">
+	
+
+	<fx:Script>
+		<![CDATA[
+			import hra.Model;
+			
+			import mx.events.FlexEvent;
+			[Bindable]
+			protected var scastka:String;
+			
+			[Bindable]
+			public var model:Model = Model.getInstance();
+
+
+			protected function view1_addHandler(event:FlexEvent):void
+			{
+				scastka = data.amount;	
+			}
+			
+			protected function goCharge(event:MouseEvent):void
+			{
+				var variables:URLVariables = new URLVariables();
+				variables.username = model.mRegistrace.username;
+				variables.castka = scastka;
+				model.apiCall("addKredit", variables, chargeHandler);
+			}
+
+			private function chargeHandler(res:Object):void
+			{
+				if (res.status != "ok" ) {
+					model.okno('Chyba!', res.msg,true,false,false);
+					return;
+				}
+				model.creditMsg = res.credit + " EUR";
+				navigator.popToFirstView();
+			}		
+
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:VGroup  width="100%" height="100%" paddingTop="0" verticalAlign="top">
+		
+		<s:Label width="100%" textAlign="center" text="Tady bude PayPal" />
+		<s:Label width="100%" textAlign="center" text="" />
+		<s:Label width="100%" textAlign="center" text="Potvrďte dobití {scastka}" />
+		
+		<s:HGroup width="100%" horizontalAlign="center">
+			<s:Button width="40%" height="15%"  label="Dobít" click="goCharge(event)" skinClass="skins.buttons.buttonGold"/>
+			<s:Button width="40%" height="15%"  label="Zrušit" click="{navigator.popToFirstView()}" skinClass="skins.buttons.buttonGold"/>				
+		</s:HGroup>
+
+		
+		<s:Button label="OK" click="{navigator.popToFirstView()}"  skinClass="skins.buttons.buttonGold"/>
+
+		
+	</s:VGroup>
+	
+</s:View>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009"
+		backgroundColor="0x212121"
+		xmlns:s="library://ns.adobe.com/flex/spark" title="Vsaď se"
+		actionBarVisible="false" tabBarVisible="false" 
+		>
+	
+
+	<fx:Script>
+		<![CDATA[
+			import hra.Model;
+			
+			import pl.mllr.extensions.contactEditor.ContactEditor;
+			import pl.mllr.extensions.contactEditor.ContactEditorEvent;
+			
+			import spark.components.TabbedViewNavigator;
+						
+			[Bindable]
+			private var model:Model = Model.getInstance();
+			private var playerFound:Boolean = false;
+			private var username:String;
+			private var fullname:String;
+			
+			private var contactEditor:ContactEditor;
+						
+			protected function goFindPlayer(event:MouseEvent):void
+			{
+				if (txtUsername.text == "") return;
+				var v:URLVariables = new URLVariables();
+				v.username = txtUsername.text;
+				model.apiCall("betCheckUser", v, gotPlayer);
+			}
+			
+			protected function gotPlayer(res:Object):void {
+				if (res.exists == "1") {
+					btnNext.enabled = true;
+					playerFound = true;
+					txt1.text = "Uživatel nalezen:";
+					txt2.text = res.fullname;
+					txt3.text = "Vsadit se? Částka bude blokována na Vašem účtě do ukončení sázky!";
+					fullname = res.fullname;
+					username = txtUsername.text;
+					return;
+				} else {
+					btnNext.enabled = true;
+					playerFound = false;
+					txt1.text = "Uživatel nenalezen:";
+					txt2.text = txtUsername.text;
+					txt3.text = "Odeslat pozvání přes SMS?";
+					btnNext.enabled = true;
+				}
+			}
+			
+			
+//			navigator.pushView(bidFinishView)
+			
+			protected function goNextStep(event:MouseEvent):void
+			{
+				if (playerFound) {
+					var o:Object = new Object();
+					o.username = username;
+					o.fullname = fullname;
+					model.betUsername = username;
+					model.betFullname = fullname;
+					navigator.pushView(betAmountView, o);
+				} else {
+					var sURL:String;
+					sURL = "sms:" + txtUsername.text + "?body=Pojd se se mnou vsadit ve hre 9 M.A.D.$";
+					navigateToURL(new URLRequest(sURL),"_blank");
+				}
+			}
+			
+			protected function goOpenContacts(event:MouseEvent):void
+			{
+				contactEditor=new ContactEditor();
+				contactEditor.addEventListener(ContactEditorEvent.CONTACT_SELECTED,onContactSelectedHanlder);
+				contactEditor.pickContact(ContactEditor.ANDORID_CONTACT_PICK_BY_PHONE);
+				
+			}
+			
+			private function onContactSelectedHanlder(event:ContactEditorEvent):void
+			{
+				var contact:Object = contactEditor.getContactDetails(event.recordId);
+				var nra:Array = contact.phones as Array;
+				if ((nra == null) || (nra.lenght == 0)) {
+					txtUsername.text = "";
+					return;
+				}
+				//TODO: co kdyz bude mit cisel vic
+				var s:String = nra[0];
+				s=s.replace(/ /g,"");
+				txtUsername.text = s;
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:Group width="100%" height="100%">
+		<s:VGroup  width="100%" height="100%" paddingTop="20" verticalAlign="top" paddingLeft="20" horizontalAlign="center">
+			<s:Label width="100%" textAlign="center" text="VSAĎ SE S KAMARÁDEM" />
+			<s:Spacer height="20" />
+			<s:Label width="100%" textAlign="center" text="Přezdívka nebo telefonní číslo:" />
+			<s:TextInput id="txtUsername" skinClass="skins.TextEditDeleteSkin" width="80%" prompt="Vyplň telefonní číslo" softKeyboardType="contact"/>
+			<s:Button label="HLEDEJ"  skinClass="skins.buttons.buttonGold" click="goFindPlayer(event)"/>
+			<s:Button label="SEZNAM"  skinClass="skins.buttons.buttonGold" click="goOpenContacts(event)"/>
+			
+	
+			<s:Spacer height="20" />
+	 		<s:Label width="100%" textAlign="center" id="txt1" />
+			<s:Label width="100%" textAlign="center" id="txt2" />
+			<s:Spacer height="20" />
+			<s:Label width="100%" textAlign="center" id="txt3" />
+			<s:Spacer height="20" />
+		</s:VGroup>
+		<s:HGroup bottom="20" width="100%" horizontalAlign="center">
+			<s:Button width="40%" skinClass="skins.buttons.buttonGold" label="NE" click="{navigator.popToFirstView()}"/>
+			<s:Button width="40%" skinClass="skins.buttons.buttonGold" label="ANO" click="goNextStep(event)" id="btnNext" enabled="false"/>			
+		</s:HGroup>
+	</s:Group>
+
+</s:View>

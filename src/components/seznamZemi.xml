@@ -1,0 +1,251 @@
+<seznam>
+<option value="CZ" label="Česko" />
+<option value="SK" label="Slovensko" />
+<option value="AF" label="Afghanistan" />
+<option value="AL" label="Albania" />
+<option value="DZ" label="Algeria" />
+<option value="AS" label="American Samoa" />
+<option value="AD" label="Andorra" />
+<option value="AG" label="Angola" />
+<option value="AI" label="Anguilla" />
+<option value="AG" label="Antigua &amp; Barbuda" />
+<option value="AR" label="Argentina" />
+<option value="AA" label="Armenia" />
+<option value="AW" label="Aruba" />
+<option value="AU" label="Australia" />
+<option value="AT" label="Austria" />
+<option value="AZ" label="Azerbaijan" />
+<option value="BS" label="Bahamas" />
+<option value="BH" label="Bahrain" />
+<option value="BD" label="Bangladesh" />
+<option value="BB" label="Barbados" />
+<option value="BY" label="Belarus" />
+<option value="BE" label="Belgium" />
+<option value="BZ" label="Belize" />
+<option value="BJ" label="Benin" />
+<option value="BM" label="Bermuda" />
+<option value="BT" label="Bhutan" />
+<option value="BO" label="Bolivia" />
+<option value="BL" label="Bonaire" />
+<option value="BA" label="Bosnia &amp; Herzegovina" />
+<option value="BW" label="Botswana" />
+<option value="BR" label="Brazil" />
+<option value="BC" label="British Indian Ocean Ter" />
+<option value="BN" label="Brunei" />
+<option value="BG" label="Bulgaria" />
+<option value="BF" label="Burkina Faso" />
+<option value="BI" label="Burundi" />
+<option value="KH" label="Cambodia" />
+<option value="CM" label="Cameroon" />
+<option value="CA" label="Canada" />
+<option value="IC" label="Canary Islands" />
+<option value="CV" label="Cape Verde" />
+<option value="KY" label="Cayman Islands" />
+<option value="CF" label="Central African Republic" />
+<option value="TD" label="Chad" />
+<option value="CD" label="Channel Islands" />
+<option value="CL" label="Chile" />
+<option value="CN" label="China" />
+<option value="CI" label="Christmas Island" />
+<option value="CS" label="Cocos Island" />
+<option value="CO" label="Colombia" />
+<option value="CC" label="Comoros" />
+<option value="CG" label="Congo" />
+<option value="CK" label="Cook Islands" />
+<option value="CR" label="Costa Rica" />
+<option value="CT" label="Cote D'Ivoire" />
+<option value="HR" label="Croatia" />
+<option value="CU" label="Cuba" />
+<option value="CB" label="Curacao" />
+<option value="CY" label="Cyprus" />
+<option value="CZ" label="Czech Republic" />
+<option value="DK" label="Denmark" />
+<option value="DJ" label="Djibouti" />
+<option value="DM" label="Dominica" />
+<option value="DO" label="Dominican Republic" />
+<option value="TM" label="East Timor" />
+<option value="EC" label="Ecuador" />
+<option value="EG" label="Egypt" />
+<option value="SV" label="El Salvador" />
+<option value="GQ" label="Equatorial Guinea" />
+<option value="ER" label="Eritrea" />
+<option value="EE" label="Estonia" />
+<option value="ET" label="Ethiopia" />
+<option value="FA" label="Falkland Islands" />
+<option value="FO" label="Faroe Islands" />
+<option value="FJ" label="Fiji" />
+<option value="FI" label="Finland" />
+<option value="FR" label="France" />
+<option value="GF" label="French Guiana" />
+<option value="PF" label="French Polynesia" />
+<option value="FS" label="French Southern Ter" />
+<option value="GA" label="Gabon" />
+<option value="GM" label="Gambia" />
+<option value="GE" label="Georgia" />
+<option value="DE" label="Germany" />
+<option value="GH" label="Ghana" />
+<option value="GI" label="Gibraltar" />
+<option value="GB" label="Great Britain" />
+<option value="GR" label="Greece" />
+<option value="GL" label="Greenland" />
+<option value="GD" label="Grenada" />
+<option value="GP" label="Guadeloupe" />
+<option value="GU" label="Guam" />
+<option value="GT" label="Guatemala" />
+<option value="GN" label="Guinea" />
+<option value="GY" label="Guyana" />
+<option value="HT" label="Haiti" />
+<option value="HW" label="Hawaii" />
+<option value="HN" label="Honduras" />
+<option value="HK" label="Hong Kong" />
+<option value="HU" label="Hungary" />
+<option value="IS" label="Iceland" />
+<option value="IN" label="India" />
+<option value="ID" label="Indonesia" />
+<option value="IA" label="Iran" />
+<option value="IQ" label="Iraq" />
+<option value="IR" label="Ireland" />
+<option value="IM" label="Isle of Man" />
+<option value="IL" label="Israel" />
+<option value="IT" label="Italy" />
+<option value="JM" label="Jamaica" />
+<option value="JP" label="Japan" />
+<option value="JO" label="Jordan" />
+<option value="KZ" label="Kazakhstan" />
+<option value="KE" label="Kenya" />
+<option value="KI" label="Kiribati" />
+<option value="NK" label="Korea North" />
+<option value="KS" label="Korea South" />
+<option value="KW" label="Kuwait" />
+<option value="KG" label="Kyrgyzstan" />
+<option value="LA" label="Laos" />
+<option value="LV" label="Latvia" />
+<option value="LB" label="Lebanon" />
+<option value="LS" label="Lesotho" />
+<option value="LR" label="Liberia" />
+<option value="LY" label="Libya" />
+<option value="LI" label="Liechtenstein" />
+<option value="LT" label="Lithuania" />
+<option value="LU" label="Luxembourg" />
+<option value="MO" label="Macau" />
+<option value="MK" label="Macedonia" />
+<option value="MG" label="Madagascar" />
+<option value="MY" label="Malaysia" />
+<option value="MW" label="Malawi" />
+<option value="MV" label="Maldives" />
+<option value="ML" label="Mali" />
+<option value="MT" label="Malta" />
+<option value="MH" label="Marshall Islands" />
+<option value="MQ" label="Martinique" />
+<option value="MR" label="Mauritania" />
+<option value="MU" label="Mauritius" />
+<option value="ME" label="Mayotte" />
+<option value="MX" label="Mexico" />
+<option value="MI" label="Midway Islands" />
+<option value="MD" label="Moldova" />
+<option value="MC" label="Monaco" />
+<option value="MN" label="Mongolia" />
+<option value="MS" label="Montserrat" />
+<option value="MA" label="Morocco" />
+<option value="MZ" label="Mozambique" />
+<option value="MM" label="Myanmar" />
+<option value="NA" label="Nambia" />
+<option value="NU" label="Nauru" />
+<option value="NP" label="Nepal" />
+<option value="AN" label="Netherland Antilles" />
+<option value="NL" label="Netherlands (Holland, Europe)" />
+<option value="NV" label="Nevis" />
+<option value="NC" label="New Caledonia" />
+<option value="NZ" label="New Zealand" />
+<option value="NI" label="Nicaragua" />
+<option value="NE" label="Niger" />
+<option value="NG" label="Nigeria" />
+<option value="NW" label="Niue" />
+<option value="NF" label="Norfolk Island" />
+<option value="NO" label="Norway" />
+<option value="OM" label="Oman" />
+<option value="PK" label="Pakistan" />
+<option value="PW" label="Palau Island" />
+<option value="PS" label="Palestine" />
+<option value="PA" label="Panama" />
+<option value="PG" label="Papua New Guinea" />
+<option value="PY" label="Paraguay" />
+<option value="PE" label="Peru" />
+<option value="PH" label="Philippines" />
+<option value="PO" label="Pitcairn Island" />
+<option value="PL" label="Poland" />
+<option value="PT" label="Portugal" />
+<option value="PR" label="Puerto Rico" />
+<option value="QA" label="Qatar" />
+<option value="ME" label="Republic of Montenegro" />
+<option value="RS" label="Republic of Serbia" />
+<option value="RE" label="Reunion" />
+<option value="RO" label="Romania" />
+<option value="RU" label="Russia" />
+<option value="RW" label="Rwanda" />
+<option value="NT" label="St Barthelemy" />
+<option value="EU" label="St Eustatius" />
+<option value="HE" label="St Helena" />
+<option value="KN" label="St Kitts-Nevis" />
+<option value="LC" label="St Lucia" />
+<option value="MB" label="St Maarten" />
+<option value="PM" label="St Pierre &amp; Miquelon" />
+<option value="VC" label="St Vincent &amp; Grenadines" />
+<option value="SP" label="Saipan" />
+<option value="SO" label="Samoa" />
+<option value="AS" label="Samoa American" />
+<option value="SM" label="San Marino" />
+<option value="ST" label="Sao Tome &amp; Principe" />
+<option value="SA" label="Saudi Arabia" />
+<option value="SN" label="Senegal" />
+<option value="RS" label="Serbia" />
+<option value="SC" label="Seychelles" />
+<option value="SL" label="Sierra Leone" />
+<option value="SG" label="Singapore" />
+<option value="SK" label="Slovakia" />
+<option value="SI" label="Slovenia" />
+<option value="SB" label="Solomon Islands" />
+<option value="OI" label="Somalia" />
+<option value="ZA" label="South Africa" />
+<option value="ES" label="Spain" />
+<option value="LK" label="Sri Lanka" />
+<option value="SD" label="Sudan" />
+<option value="SR" label="Suriname" />
+<option value="SZ" label="Swaziland" />
+<option value="SE" label="Sweden" />
+<option value="CH" label="Switzerland" />
+<option value="SY" label="Syria" />
+<option value="TA" label="Tahiti" />
+<option value="TW" label="Taiwan" />
+<option value="TJ" label="Tajikistan" />
+<option value="TZ" label="Tanzania" />
+<option value="TH" label="Thailand" />
+<option value="TG" label="Togo" />
+<option value="TK" label="Tokelau" />
+<option value="TO" label="Tonga" />
+<option value="TT" label="Trinidad &amp; Tobago" />
+<option value="TN" label="Tunisia" />
+<option value="TR" label="Turkey" />
+<option value="TU" label="Turkmenistan" />
+<option value="TC" label="Turks &amp; Caicos Is" />
+<option value="TV" label="Tuvalu" />
+<option value="UG" label="Uganda" />
+<option value="UA" label="Ukraine" />
+<option value="AE" label="United Arab Emirates" />
+<option value="GB" label="United Kingdom" />
+<option value="US" label="United States of America" />
+<option value="UY" label="Uruguay" />
+<option value="UZ" label="Uzbekistan" />
+<option value="VU" label="Vanuatu" />
+<option value="VS" label="Vatican City State" />
+<option value="VE" label="Venezuela" />
+<option value="VN" label="Vietnam" />
+<option value="VB" label="Virgin Islands (Brit)" />
+<option value="VA" label="Virgin Islands (USA)" />
+<option value="WK" label="Wake Island" />
+<option value="WF" label="Wallis &amp; Futana Is" />
+<option value="YE" label="Yemen" />
+<option value="ZR" label="Zaire" />
+<option value="ZM" label="Zambia" />
+<option value="ZW" label="Zimbabwe" />
+</seznam>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hra:RegAcceptBase xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:hra="hra.*"
+				   backgroundColor="0x212121"
+				   tabBarVisible="false"
+				   actionBarVisible="true"
+				   xmlns:s="library://ns.adobe.com/flex/spark" title="Souhlas 1">
+	
+	<hra:navigationContent>
+		<s:HGroup paddingLeft="10">
+			<s:Button label="Back" click="{navigator.popView()}" />		
+		</s:HGroup>		
+	</hra:navigationContent>
+	
+	
+	<s:Scroller id="scMain" width="100%" height="100%" verticalScrollPolicy="on" horizontalScrollPolicy="off">
+		<s:VGroup  width="100%" height="100%" paddingTop="20" verticalAlign="top" horizontalAlign="center" gap="20" paddingLeft="20" paddingRight="20">
+			
+			
+			<s:Label width="100%" textAlign="left" text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec condimentum venenatis mi, sit amet mollis tortor varius eget. Nam eu sollicitudin metus. Vivamus feugiat tempus erat ac egestas. Curabitur gravida dolor eget nibh facilisis ullamcorper. Sed tincidunt nibh sit amet urna pellentesque, vel vulputate neque pharetra. Pellentesque vel semper lacus. Quisque egestas mauris sed gravida euismod. Morbi vehicula lobortis convallis. Mauris laoreet pharetra aliquam. Maecenas hendrerit vitae tortor ut convallis. Morbi bibendum quam id faucibus ullamcorper. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nunc lorem nunc, sollicitudin vitae erat a, dictum aliquet nibh. Aenean a gravida lorem, vitae tempor erat. Nullam ultrices tortor eget dui pretium posuere." />
+			
+			
+			<s:Button width="40%" label="Souhlasím" click="doAgree(1)"/>
+			
+			
+		</s:VGroup>
+	</s:Scroller>
+	
+	
+</hra:RegAcceptBase>

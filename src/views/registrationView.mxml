@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009"
+		backgroundColor="0x212121" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="Registrace" actionBarVisible="false">
+	<fx:Script>
+		<![CDATA[
+			import spark.events.IndexChangeEvent;
+			
+			protected function bbFiltr_changeHandler(event:IndexChangeEvent):void
+			{
+				// TODO Auto-generated method stub
+				
+			}
+			
+		]]>
+	</fx:Script>
+	
+	
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:VGroup  width="100%" height="100%" paddingTop="0" verticalAlign="top" paddingLeft="20" paddingRight="20">
+		<s:Label width="100%" id="lblStatus" textAlign="center" text="LOGIN" />
+		
+		
+		<s:ButtonBar width="100%" change="navigator.popView()" id="bbFiltr" selectedIndex="1">
+			<s:ArrayCollection>
+				<fx:Object label="Přihlášení"  />
+				<fx:Object label="Registrace"  />
+			</s:ArrayCollection>
+		</s:ButtonBar>	
+		
+		<s:Scroller id="scMain" width="100%" height="100%">	
+			<s:VGroup width="100%" height="100%" paddingTop="10">
+				<s:Label width="100%" textAlign="left" text="Pokud jste nový a chcete se registrovat" />
+				<s:TextInput skinClass="spark.skins.mobile.TextInputSkin" width="100%" prompt="Uživatelské jméno - Nick" softKeyboardType="default"/>
+				<s:TextInput skinClass="spark.skins.mobile.TextInputSkin" width="100%" prompt="Heslo" displayAsPassword="true"/>
+				<s:TextInput skinClass="spark.skins.mobile.TextInputSkin" width="100%" prompt="Heslo" displayAsPassword="true"/>
+				<s:Spacer width="10" height="10" />
+				<s:TextInput skinClass="spark.skins.mobile.TextInputSkin" width="100%" prompt="Ulice a číslo popisné"/>
+				<s:TextInput skinClass="spark.skins.mobile.TextInputSkin" width="100%" prompt="Město"/>
+				<s:TextInput skinClass="spark.skins.mobile.TextInputSkin" width="100%" prompt="Země"/> <!-- TODO: výběr země -->
+				<s:Spacer width="10" height="10" />
+				<s:TextInput skinClass="spark.skins.mobile.TextInputSkin" width="100%" prompt="Datum narození"/>
+				<s:Spacer width="10" height="10" />
+				<s:TextInput skinClass="spark.skins.mobile.TextInputSkin" width="100%" prompt="E-mail" softKeyboardType="email"/>
+				<s:TextInput skinClass="spark.skins.mobile.TextInputSkin" width="100%" prompt="Telefon" softKeyboardType="contact"/>
+				
+				<s:Group width="100%">
+					<s:Button label="Registrovat" right="0"  click="{navigator.pushView(regAcceptView)}"/>
+				</s:Group>
+			</s:VGroup>
+		</s:Scroller>
+	</s:VGroup>
+	
+</s:View>

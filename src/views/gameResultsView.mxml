@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:s="library://ns.adobe.com/flex/spark"
+		actionBarVisible="false" tabBarVisible="false" title="HomeView"
+		initialize="init()"  backKeyPressed="backButtonPressed(event)">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import flashx.textLayout.formats.TextAlign;
+			
+			import hra.Model;
+			
+			import mx.collections.ArrayList;
+			import mx.core.FlexGlobals;
+			import mx.events.FlexEvent;
+			
+			import spark.events.PopUpEvent;
+			import spark.transitions.CrossFadeViewTransition;
+			import spark.transitions.ViewTransitionDirection;
+			public var questionArray:ArrayList;
+			private var answersArray:ArrayList;
+			
+			private var fadeTrans:CrossFadeViewTransition = new CrossFadeViewTransition(); 
+			//fadeTrans.di = ViewTransitionDirection.LEFT; 
+			
+			
+			[Bindable]
+			private var model:Model = Model.getInstance();			
+
+			[Bindable]
+			private var trialgame:Boolean;
+			[Bindable]
+			private var betgame:Boolean;
+			
+			private function init():void
+			{
+				lbCas.text = "";
+				questionArray = new ArrayList(data.questionArray);
+				answersArray = new ArrayList(data.answersArray.source);
+				trialgame = (model.gameKey == "trial");
+				var spravne:int = 0;
+				var spatne:int = 0;
+				hgVysledky.removeAllElements();
+				var poradi:int = 0;
+				for(var i:int = 0; i<3;i++)
+				{
+					var vg:VGroup = new VGroup();
+					vg.percentWidth = 33;
+					
+					for(var j:int = 0; j<3;j++)
+					{
+						var lb:Label = new Label();
+						lb.text = answersArray.source[poradi];
+						lb.percentWidth = 100;
+						lb.setStyle("textAlign", "center");
+						//lb.TextAlign = center;
+						if(answersArray.source[poradi] == questionArray.source[poradi])
+						{
+							lb.setStyle("color", "0x46c04c");
+							spravne ++;
+						}
+						else
+						{
+							lb.setStyle("color", "0xFF0000");
+							spatne ++;
+						}
+						poradi ++;												
+						vg.addElement(lb);
+					}
+					
+					hgVysledky.addElement(vg);
+				}
+				lbSpravneNum.text = String(spravne);
+				lbSpatneNum.text = String(spatne);
+				
+				if(spravne == questionArray.length)
+				{
+					taHodnoceni.text = "Jsi fakt dobrej! Můžeš hrát s ostatními o týdenní výhru " + model.gameCreditMsg;
+					lbRychlejsi.visible = true;
+					lbRychlejsi.includeInLayout = true;
+				}
+				else
+				{
+					taHodnoceni.text = "Bohužel nemáš správně všechny odpovědi! Můžeš to zkusit znovu a zlepšit se!";
+					lbRychlejsi.visible = false;
+					lbRychlejsi.includeInLayout = false;
+				}
+				
+				lbCas.text = "Tvůj čas je: " + String(data.cas).split(" ")[1] + "s";
+								
+				if (model.gameKey != "trial") {
+					var variables:URLVariables = new URLVariables();
+					variables.gameKey = model.gameKey;
+					variables.resultTime = data.resultTime;
+					variables.resultGood = spravne;
+					variables.resultBad = spatne;
+					variables.betKey = model.betKey;
+					model.apiCall("gameEnd", variables, gameStartHandler);
+				} else {
+					
+				}
+				
+			}
+			
+			// kdyz jsem oznamil na server vysledek svoji hry
+			private function gameStartHandler(o:Object):void
+			{
+			}
+
+			
+			
+			protected function goPlayAgain(event:MouseEvent, kam:String):void
+			{
+				if (kam == "trial") {
+					navigator.replaceView(gameIntroView, {gameMode:'try'},null,fadeTrans);
+				} else {
+					// TODO: resit prihlaseni
+					navigator.replaceView(gameIntroView, {gameMode:'game', gameAmount: model.gameCreditMsg, gamePartner:""},null,fadeTrans);
+				}
+				
+			}
+
+			protected function backButtonPressed(event:FlexEvent):void
+			{
+				// Zadne tlacitko zpet v prubehu hry
+				event.cancelable;
+				event.preventDefault();
+			}
+			
+			protected function goNotBet(event:MouseEvent):void
+			{
+				navigator.popToFirstView();
+			}
+			
+			
+			protected function goBet(event:MouseEvent):void
+			{
+				var v:URLVariables = new URLVariables();
+				v.username = model.betUsername;
+				v.amount = model.betAmount;
+				v.gameKey1 = model.gameKey;
+				model.apiCall("betRegister", v, gotBet);
+			}
+			
+			protected function gotBet(res:Object):void {
+				if (res.status != "ok") {
+					model.okno("Chyba", res.msg, true, false, false);
+					return;
+				}
+				model.creditMsg = res.credit + " EUR";
+				model.okno("OK", "Hráč vyzván", true, false, false, goHome);
+			}
+			
+			protected function goHome(e:PopUpEvent):void
+			{
+				model.mNavigator.popToFirstView();
+			}			
+			
+			protected function goBetBack(event:MouseEvent):void
+			{
+				model.mNavigator.popToFirstView();
+			}			
+			
+		]]>
+	</fx:Script>
+	
+	<s:VGroup width="100%" gap="0">
+		<s:Group width="100%">
+			<s:layout>
+				<s:VerticalLayout 
+					paddingLeft="10" paddingRight="10"
+					paddingTop="30" paddingBottom="10"
+					horizontalAlign="center"
+					gap="10"/>
+			</s:layout>
+			
+			<s:TextArea id="taHodnoceni" width="80%" borderVisible="false" contentBackgroundColor="0xFFFFFF"
+						editable="false" skinClass="spark.skins.mobile.TextAreaSkin"
+						styleName="ophdText" textAlign="center"/>
+			<s:Label id="lbCas" width="80%" fontSize="20" fontWeight="bold"
+					 text="Tvůj čas je 00:06:702s" textAlign="center"
+					 paddingBottom="10"/>
+			<s:Label id="lbRychlejsi" width="80%" text="A jsi rychlejší než 76% hrajících!" textAlign="center" paddingBottom="10"/>		
+		</s:Group>
+		<s:HGroup id="hgVysledky" width="100%">
+			<s:VGroup width="33%">
+				<s:Label width="100%" textAlign="center"/>
+				<s:Label width="100%" textAlign="center"/>
+				<s:Label width="100%" textAlign="center"/>
+			</s:VGroup>
+			<s:VGroup width="33%">
+				<s:Label width="100%" textAlign="center"/>
+				<s:Label width="100%" textAlign="center"/>
+				<s:Label width="100%" textAlign="center"/>
+			</s:VGroup>
+			<s:VGroup width="33%">
+				<s:Label width="100%" textAlign="center"/>
+				<s:Label width="100%" textAlign="center"/>
+				<s:Label width="100%" textAlign="center"/>
+			</s:VGroup>
+		</s:HGroup>
+		
+		<s:HGroup width="100%" paddingTop="10" paddingBottom="15">
+			
+			<s:HGroup width="50%" horizontalAlign="center">
+				<s:BorderContainer id="brdr"
+								   cornerRadius="6"
+								   backgroundColor="0x00FF00"
+								   horizontalCenter="0" verticalCenter="0">
+					<s:Label id="lbSpravneNum" width="100%" height="100%" fontWeight="bold"
+							 paddingBottom="3" paddingLeft="5" paddingRight="5" paddingTop="5"
+							 text="7" textAlign="center" verticalAlign="middle"/>
+				</s:BorderContainer>
+				<s:Label height="100%" verticalAlign="middle" text="Správně" paddingBottom="5" paddingTop="5"/>
+			</s:HGroup>
+			
+			<s:HGroup width="50%" horizontalAlign="center">
+				<s:BorderContainer id="brdr2"
+								   cornerRadius="6"
+								   backgroundColor="0xFF0000"
+								   horizontalCenter="0" verticalCenter="0">
+					<s:Label id="lbSpatneNum" width="100%" height="100%" fontWeight="bold"
+							 paddingBottom="3" paddingLeft="5" paddingRight="5" paddingTop="5"
+							 text="7" textAlign="center" verticalAlign="middle"/>
+				</s:BorderContainer>
+				<s:Label height="100%" verticalAlign="middle" text="Špatně" paddingBottom="5" paddingTop="5"/>
+			</s:HGroup>
+			
+		</s:HGroup>
+	</s:VGroup>
+	
+	<s:VGroup width="100%" bottom="10" horizontalAlign="center" visible="{(model.gameMode=='trial')}">
+		<s:Image width="30%" fillMode="scale" verticalAlign="bottom" source="{model.res.imgSocial}"/>
+		<s:HGroup width="100%" horizontalAlign="center">
+			<s:Button height="60" bottom="10" left="10" label="Hrát naostro!" click="goPlayAgain(event, 'game')" visible="{model.gameMode=='trial'}"
+					  skinClass="skins.buttons.buttonGold"
+					  />
+			<s:Button height="60" bottom="10" right="10" label="Zkusit znovu" click="goPlayAgain(event, 'trial')" 
+					  skinClass="skins.buttons.buttonGold"
+					  />		
+		</s:HGroup>
+	</s:VGroup>
+
+	<s:VGroup width="100%" bottom="10" horizontalAlign="center" visible="{(model.gameMode=='game')}">
+		<s:Image width="30%" fillMode="scale" verticalAlign="bottom" source="{model.res.imgSocial}"/>
+		<s:HGroup width="100%" horizontalAlign="center">
+			<s:Button width="40%" label="Konec" click="goBetBack(event)" skinClass="skins.buttons.buttonGold"/>			
+			<s:Button width="40%" label="Hrát znovu" click="goPlayAgain(event, 'game')" skinClass="skins.buttons.buttonGold"/>
+		</s:HGroup>
+	</s:VGroup>	
+
+	
+	<s:VGroup width="100%" bottom="10" horizontalAlign="center" visible="{(model.gameMode=='bet1')}">
+		<s:Label width="100%" text="Chcete se opravdu vsadit?" textAlign="center" />
+		<s:HGroup width="100%" horizontalAlign="center">
+			<s:Button width="40%" label="NE" click="goNotBet(event)" skinClass="skins.buttons.buttonGold"/>			
+			<s:Button width="40%" label="ANO" click="goBet(event)" skinClass="skins.buttons.buttonGold"/>
+		</s:HGroup>
+	</s:VGroup>	
+	
+	<s:VGroup width="100%" bottom="10" horizontalAlign="center" visible="{(model.gameMode=='bet2')}">
+		<s:Label width="100%" text="Sázka odehraná" textAlign="center" />
+		<s:HGroup width="100%" horizontalAlign="center">
+			<s:Button width="40%" label="OK" click="goBetBack(event)" skinClass="skins.buttons.buttonGold"/>			
+		</s:HGroup>
+	</s:VGroup>	
+
+	
+</s:View>

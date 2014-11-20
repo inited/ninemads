@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" backgroundColor="0xdddddd" add="addHandler(event)"
+		xmlns:s="library://ns.adobe.com/flex/spark" title="Datum narození" >
+
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			protected function btnClose_clickHandler(event:MouseEvent):void
+			{
+				navigator.popView();
+			}
+			
+			protected function btnUse_clickHandler(event:MouseEvent):void
+			{
+				data.selectedDate = dtDatum.selectedDate;
+				navigator.popView();				
+			}
+			
+			
+			protected function skinnablepopupcontainer1_creationCompleteHandler(event:FlexEvent):void
+			{
+				dtDatum.selectedDate = data.selectedDate;
+			}
+
+			override public function createReturnObject():Object {
+				return data;
+			}
+
+			
+			protected function addHandler(event:FlexEvent):void
+			{
+				dtDatum.selectedDate = data.selectedDate;
+//				dtDatum.selectedDate = new Date();
+				
+			}
+			
+		]]>
+	</fx:Script>	
+	<fx:Declarations>
+		<s:DateTimeFormatter id="dtf" dateTimePattern="EEEE, MMMM dd, yyyy h:mm a" />
+	</fx:Declarations>
+
+	<s:navigationContent>
+		<s:HGroup paddingLeft="10">
+			<s:Button label="Close"  click="btnClose_clickHandler(event)"/>		
+		</s:HGroup>		
+	</s:navigationContent>
+	<s:actionContent>
+		<s:HGroup paddingRight="10">
+			<s:Button label="OK" click="btnUse_clickHandler(event)"/>		
+		</s:HGroup>		
+	</s:actionContent>
+
+
+	<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%" color="0x000000">
+		<s:Label id="tWindow" text="Date, time" paddingBottom="10" paddingTop="10" fontWeight="bold" width="100%" textAlign="center" color="0x000000"/>
+		
+		<s:DateSpinner id="dtDatum" width="100%" />
+	</s:VGroup>
+
+	
+
+</s:View>

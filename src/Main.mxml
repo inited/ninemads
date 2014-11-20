@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TabbedViewNavigatorApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
+								  xmlns:s="library://ns.adobe.com/flex/spark"
+								  backgroundColor="black" initialize="init()" 
+								  splashScreenImage="hra.Splash" splashScreenScaleMode="none" splashScreenMinimumDisplayTime="300"
+								  >
+
+	<fx:Script>
+		<![CDATA[
+			import hra.Model;
+			
+			import mx.core.FlexGlobals;
+			import mx.events.FlexEvent;
+			
+			import spark.events.IndexChangeEvent;
+			
+			import views.loginView;
+			
+			[Bindable]
+			private var model:Model = Model.getInstance();
+			
+			private function init():void
+			{
+				model.setApp(this);
+				model.appHeight = FlexGlobals.topLevelApplication.height;
+				model.appWidth = FlexGlobals.topLevelApplication.width;
+				model.appDPI = FlexGlobals.topLevelApplication.applicationDPI;
+				tabbedNavigator.addEventListener(IndexChangeEvent.CHANGING, onTabChange); 	
+			}
+			
+			protected function onTabChange(event:IndexChangeEvent):void
+			{
+				if (((event.newIndex==1) || (event.newIndex==2)) && !model.logged) {
+					event.preventDefault();
+					model.okno("Nejste přihlášeni","Pro vstup do sekce musíte být přihlášeni", true, false, false, function (e:Event):void {
+						var loginData:Object = new Object();
+						loginData.onLoginIndex = event.newIndex;
+						ViewNavigator(tabbedNavigator.selectedNavigator).pushView(loginView, loginData);
+					});
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	
+	
+	<fx:Style source="css/style.css"/>
+	
+	<s:ViewNavigator label="DOMŮ" width="100%" height="100%"
+					 firstView="views.homeView" icon="@Embed('images/home.png')" />
+<!--
+	<s:ViewNavigator label="SDÍLEJ" width="100%" height="100%"
+					 firstView="views.shareView" icon="@Embed('images/share.png')" />
+-->
+	<s:ViewNavigator label="VÝSLEDKY" width="100%" height="100%"
+					 firstView="views.resultsView" icon="@Embed('images/results.png')" />
+
+	<s:ViewNavigator label="MŮJ ÚČET" width="100%" height="100%"
+					 firstView="views.accountView" icon="@Embed('images/account.png')" />
+
+	<s:ViewNavigator label="NASTAVENÍ" width="100%" height="100%"
+					 firstView="views.settingsView" icon="@Embed('images/settings.png')" />
+
+	
+	
+
+</s:TabbedViewNavigatorApplication>

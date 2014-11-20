@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Graphic version="2.0" xmlns="http://ns.adobe.com/fxg/2008" viewWidth="32" viewHeight="32">
+	<Rect width="32" height="32" radiusX="12" radiusY="12">
+                 <stroke>
+                      <SolidColorStroke color="#808000" weight="1"/>
+                 </stroke>
+                 <fill>
+                 	<SolidColor color="#200000" alpha="1"/>
+                 </fill>
+	</Rect>
+	<Path data="M 3 9 L 9 3 L 29 23 L 23 29 Z" alpha="1">
+		<fill>
+			<SolidColor color="#800000"/>
+		</fill>
+	</Path>
+	<Path data="M 9 29 L 3 23 L 23 3 L 29 9 Z" alpha="1">
+		<fill>
+			<SolidColor color="#800000"/>
+		</fill>
+	</Path>
+</Graphic>

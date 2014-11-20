@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" creationComplete="init(event)"
+		backgroundColor="0x212121"	
+		xmlns:s="library://ns.adobe.com/flex/spark" title="Můj účet" actionBarVisible="false">
+
+	
+	<fx:Script>
+		<![CDATA[
+			import hra.Model;
+			
+			import mx.events.FlexEvent;
+			
+			import spark.components.TabbedViewNavigator;
+			protected var scastka:String;
+			
+			[Bindable]
+			public var model:Model = Model.getInstance();
+
+			protected function init(event:FlexEvent):void
+			{
+			}
+			
+		]]>
+	</fx:Script>
+		
+	<s:Scroller id="scMain" width="100%" height="100%" verticalScrollPolicy="on" horizontalScrollPolicy="off">
+		<s:VGroup  width="100%" height="100%" paddingTop="0" verticalAlign="top" horizontalAlign="center">
+		
+			<s:Spacer width="10"  height="10%" />
+			<s:Label width="60%" textAlign="left" text="Stav účtu: {model.creditMsg}"  visible="{model.logged}"/>
+			<s:Spacer width="10"  height="5%" />
+			<s:Button width="60%" height="10%" label="Dobití prostředků"  click="{navigator.pushView(chargeView)}" skinClass="skins.buttons.buttonGold"/>
+			<s:Spacer width="10"  height="5%" />
+			<s:Button width="60%" height="10%" label="Výplata prostředků"  click="{navigator.pushView(dischargeView)}" skinClass="skins.buttons.buttonGold"/>
+		</s:VGroup>
+	</s:Scroller>
+	
+</s:View>

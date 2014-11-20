@@ -1,0 +1,192 @@
+
+@namespace s "library://ns.adobe.com/flex/spark";
+@namespace views "views.*";
+@namespace components "components.*";
+
+@font-face { 
+	src: url("fonts/ubuntu-regular-webfont.ttf"); 
+	fontFamily: localUbuntuCFF; 
+	fontStyle: normal;
+	fontWeight: normal;
+	embedAsCFF: false;
+	advanced-anti-aliasing: true;		
+}       
+
+@font-face { 
+	src: url("fonts/ubuntu-bold-webfont.ttf"); 
+	fontFamily: localUbuntuCFF; 
+	fontStyle: normal;
+	fontWeight: bold;
+	embedAsCFF: false;
+	advanced-anti-aliasing: true;		
+}       
+
+
+
+@font-face { 
+	src: url("fonts/ubuntu-regular-webfont.ttf"); 
+	fontFamily: localUbuntu; 
+	fontStyle: normal;
+	fontWeight: normal;
+	embedAsCFF: true;
+	advanced-anti-aliasing: true;		
+}       
+
+@font-face { 
+	src: url("fonts/ubuntu-bold-webfont.ttf"); 
+	fontFamily: localUbuntu; 
+	fontStyle: normal;
+	fontWeight: bold;
+	embedAsCFF: true;
+	advanced-anti-aliasing: true;		
+}       
+
+global {
+	modalTransparencyColor: black;
+	modalTransparency: 0.6;
+}
+
+/*
+@font-face { 
+	src: url("fonts/ubuntu-bold-webfont.ttf"); 
+	fontFamily: localUbuntu; 
+	font-style: normal;
+	font-weight: bold;
+	embedAsCFF: false;
+	advanced-anti-aliasing: true;		
+}     
+*/
+
+s|Button {
+	color: #ffff99;
+	fontFamily: localUbuntuCFF;
+	fontStyle:normal;
+	fontWeight:normal;
+}
+
+s|Label {
+	color: #ffff99;
+	fontFamily: localUbuntu;
+}
+
+s|RadioButton {
+	color: #ffff99;
+	fontFamily: localUbuntu;
+}
+
+s|View {
+	skinClass: ClassReference("skins.ViewBackgroundSkin");
+	fontFamily: localUbuntu;
+}
+
+s|TextInput {
+	color: #ffff00;
+	fontFamily: localUbuntuCFF;
+	textAlign: center;
+	fontSize: 14;
+	fontWeight: bold;
+}
+
+s|CheckBox {
+	color: #ffffff;
+	fontFamily: localUbuntuCFF;
+	fontSize: 14;
+	fontWeight: normal;
+}
+
+s|ButtonBarButton {
+	color: #ffff00;
+	fontFamily: localUbuntuCFF;
+}
+
+s|DateSpinner {
+	fontFamily: localUbuntuCFF;
+}
+
+s|RadioButton {
+	fontFamily: localUbuntuCFF;
+}
+
+s|TabbedViewNavigator #tabBar {
+	chromeColor: #9d2d2b;
+	fontSize: 14;
+	fontWeight: bold;
+}
+
+components|BetItemRenderer {
+	fontFamily: localUbuntuCFF;
+}
+
+components|BetItemRenderer s|Button {
+	fontFamily: localUbuntuCFF;
+	fontSize: 28;
+	
+}
+
+components|BetItemRenderer s|Label {
+	color: #ffff00;
+}
+
+
+s|TabbedViewNavigator #tabBar s|ButtonBarButton {
+	color: white;
+}
+
+components|popUpWindow s|TextArea {
+	color: white;
+}
+
+components|popUpWindow s|Button{
+	color: #400000;
+	fontWeight: bold;
+}
+
+
+
+.homeCredit {
+	fontWeight: bold;
+}
+
+/* pro inspiraci:
+s|TabbedViewNavigatorApplication s|View s|TabbedViewNavigator#tabbedViewNavigator #tabBar s|ButtonBarButton:disabledAndSelected { 
+        chromeColor: #FFCC00; 
+        color: #000000; 
+                        
+} 
+*/
+
+
+/************************* VELIKOSTI *******************/
+s|Button {
+	fontSize: 36;
+}
+
+s|TextInput {
+	fontSize: 32;
+}
+
+s|Label {
+	fontSize: 32;
+}
+
+s|CheckBox {
+	fontSize: 20;
+}
+
+s|ButtonBarButton {
+	fontSize: 32;
+}
+
+s|DateSpinner {
+	fontSize: 40;
+}
+
+s|TabbedViewNavigator #tabBar s|ButtonBarButton {
+	fontSize: 20;
+}
+
+.gameIntroInstructions {
+	fontSize: 32;
+}
+
+

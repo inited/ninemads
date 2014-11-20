@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		actionBarVisible="false" tabBarVisible="false" title="HomeView"
+		creationComplete="init(event)"
+		>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import hra.Model;
+			
+			import spark.components.TabbedViewNavigator;
+			
+			[Bindable]
+			private var model:Model = Model.getInstance();
+
+			
+			
+			
+			
+			// data:
+			// .gameMode - game nebo try
+			// .gameAmount - castka v EUR
+			// .gamePartner - s kym se hraje
+			
+			protected function init(event:Event):void
+			{
+				if ((this.data) && (this.data.gameMode.indexOf("game") == 0)) { 
+
+					if (!model.mRegistrace.agreementsAccepted()) {
+						model.okno("Souhlas s podmínkama","Nejprve musíte souhlasit s podmínkama hry",true,false,false,zobrazSouhlasy);
+						return;
+					}
+					
+					var s:String = "";
+					if ((data.gamePartner != null) && (data.gamePartner != "")) {
+						s = " Hrajete s protihráčem " + data.gamePartner; 
+					} else {
+						s = " Hrajete sám";
+					}
+					
+					lblInstructions.text = "Po stisknutí tlačítka se spustí hra. Odpovídáte na 9 otázek stiskem tlačítka pod otázkou.\n\n" +
+						"Měří se čas zodpovězení všech otázek. Při opuštění hry z jakéhokoliv důvodu (např. telefonát) je hra považována za prohranou.\n\n" +
+						"Hrajete o " + data.gameAmount + " EUR." + s; 
+					btnPlay.label = "Hrát o " + data.gameAmount + " EUR";				
+					
+				} else {
+					lblInstructions.text = "Po stisknutí tlačítka se spustí hra. Odpovídáte na 9 otázek stiskem tlačítka pod otázkou.\n\n" +
+						"Měří se čas zodpovězení všech otázek. Při opuštění hry z jakéhokoliv důvodu (např. telefonát) je hra považována za prohranou.\n\n" +
+						"Hrajete ve zkušebním režimu, nejde vůbec o nic.";
+					btnPlay.label = "Zkusit hru";				
+				}
+				
+				
+				
+			}
+			
+			protected function zobrazSouhlasy(event:Event):void {
+				var o:Object = new Object();
+				o.back = true;
+				if (navigator == null) return;
+				navigator.pushView(regAcceptView, o);
+			}
+			
+			// vola se, kdyz player zmackne tlacitko a chce hrat
+			protected function goGameStart(event:MouseEvent):void
+			{
+				if (this.data.gameMode == "game") {
+					model.gameKey = "";
+					model.gameMode = "game";
+					if (data.betKey) {
+						model.betKey = data.betKey;
+						model.gameMode = "bet2";
+					}
+					var variables:URLVariables = new URLVariables();
+					model.apiCall("gameStart", variables, gameStartHandler);					
+				} else {
+					model.gameKey = "trial";
+					model.gameMode = "trial";
+					model.betKey = null;
+					navigator.replaceView(gameView);
+				}
+			}
+			
+			private function gameStartHandler(res:Object):void
+			{
+				if (res.status != "ok" ) {
+					model.okno('Chyba!', res.msg,true,false,false);
+					return;
+				}
+				model.creditMsg = res.credit + " EUR";
+				model.gameKey = res.gameKey;
+				navigator.replaceView(gameView);
+			}					
+
+
+			
+			
+		]]>
+	</fx:Script>
+	
+	<s:VGroup id="gMain" width="100%" height="100%" horizontalAlign="center" paddingTop="20">
+		<s:Label width="80%" id="lblInstructionsTitle" text="INSTRUKCE HRY" textAlign="center"/>
+		<s:Spacer height="20" />
+		
+		<s:Label width="80%" id="lblInstructions" textAlign="left" styleName="gameIntroInstructions" text="Tady bude text jak se hraje, za kolik se hraje prostě to co musí uživatel vědět než opravdu vsadí částku."/>
+		<s:Spacer height="20" />
+		
+		
+		<s:Button id="btnPlay" width="50%" height="10%" label="Hrát" click="goGameStart(event)" skinClass="skins.buttons.buttonGold"/>
+		<s:Spacer height="3%" />
+		<s:Button  width="50%" height="10%"  label="Zrušit" click="navigator.popView()" skinClass="skins.buttons.buttonGrey"/>
+		
+	</s:VGroup>
+	
+</s:View>

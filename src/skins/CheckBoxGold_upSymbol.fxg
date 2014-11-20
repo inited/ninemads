@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Graphic version="2.0" xmlns="http://ns.adobe.com/fxg/2008" viewWidth="32" viewHeight="32">
+	<Rect width="32" height="32" radiusX="12" radiusY="12">
+                 <stroke>
+                      <SolidColorStroke color="#808000" weight="1"/>
+                 </stroke>
+                 <fill>
+                 	<SolidColor color="#200000" alpha="1"/>
+                 </fill>
+	</Rect>
+	
+
+	<Path data="M 2 16 L 7 11 L 13 17 L 25 5 L 30 10 L 13 27 Z" alpha="1">
+		<fill>
+			<SolidColor color="#800000"/>
+		</fill>
+	</Path>
+</Graphic>

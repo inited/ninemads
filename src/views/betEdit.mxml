@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" creationComplete="init(event)"
+		backgroundColor="0x212121" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		actionBarVisible="false" tabBarVisible="false" >
+	
+	<fx:Declarations>
+		<s:RadioButtonGroup id="group" itemClick="amountChanged(event)" />
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import hra.Model;
+			
+			import mx.events.FlexEvent;
+			import mx.events.ItemClickEvent;
+			
+			import spark.components.TabbedViewNavigator;
+			import spark.events.PopUpEvent;
+			
+			[Bindable]
+			private var model:Model = Model.getInstance();
+			
+			
+			public var betKey:String;
+			public var gamePartner:String;
+
+			[Bindable]
+			public var amount:String = "0";
+			
+			protected function init(event:FlexEvent):void
+			{
+				betKey = data.betKey;
+				amount = data.gameAmount;
+				gamePartner = data.gamePartner;
+				var a:int = parseInt(amount);
+				if (a==500) {
+					rb500.selected = true;
+				} else {
+					rb500.enabled = false;
+					if (a==200) {
+						rb200.selected = true;
+					} else {
+						rb200.enabled = false;
+						if (a==100) {
+							rb100.selected = true;
+						} else {
+							rb100.enabled = false;
+							if (a==50) {
+								rb50.selected = true;
+							} else {
+								rb50.enabled = false;
+								if (a==20) {
+									rb20.selected = true;
+								} else {
+									rb20.enabled = false;
+									if (a==10) {
+										rb10.selected = true;
+									} else {
+										rb10.enabled = false;
+										if (a==5) {
+											rb5.selected = true;
+										} else {
+											rb5.enabled = false;
+											if (a==2) {
+												rb2.selected = true;
+											} else {
+												rb2.enabled = false;
+												rb1.selected = true;
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+
+				
+				
+			}
+		
+			protected function goBack(event:MouseEvent):void
+			{
+				navigator.popView();
+			}
+				
+			protected function amountChanged(event:ItemClickEvent):void
+			{
+				var s:String = event.label; 
+				var sa:Array = s.split(" ");
+				amount = "" + sa[0];
+				trace(event.label);
+			}
+			
+			protected function goPlay(event:MouseEvent):void
+			{
+				var variables:URLVariables = new URLVariables();
+				variables.betKey = betKey;
+				variables.betAmount = amount;
+				model.apiCall("betChange", variables, gameStartHandler);					
+			}
+			
+			private function gameStartHandler(res:Object):void
+			{
+				if (res.status != "ok" ) {
+					model.okno('Chyba!', res.msg,true,false,false);
+					return;
+				}
+				
+				navigator.pushView(gameIntroView, 
+					{
+						gameMode:'game', 
+						gameAmount: amount, 
+						gamePartner: gamePartner,
+						betKey: betKey
+					});
+			}					
+			
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:Scroller id="scMain" width="100%" height="100%" verticalScrollPolicy="on" horizontalScrollPolicy="off">	
+	
+		<s:VGroup  width="100%" height="100%" paddingTop="20" verticalAlign="top" paddingLeft="20">
+			
+			<s:Label width="100%" textAlign="center" text="NAVRHUJI JINOU ČÁSTKU" />
+<!--			
+			<s:Label width="100%" textAlign="left" text="SOUPEŘ: {fullname}" />
+-->			
+			<s:Label width="100%" textAlign="left" text="ČÁSTKA: {amount} EUR" />
+			
+			<s:VGroup width="100%" paddingLeft="20">
+				<s:RadioButton groupName="group" label="500 EUR" id="rb500" />
+				<s:RadioButton groupName="group" label="200 EUR" id="rb200" />
+				<s:RadioButton groupName="group" label="100 EUR" id="rb100" />
+				<s:RadioButton groupName="group" label="50 EUR" id="rb50" />
+				<s:RadioButton groupName="group" label="20 EUR" id="rb20" />
+				<s:RadioButton groupName="group" label="10 EUR" id="rb10" />
+				<s:RadioButton groupName="group" label="5 EUR" id="rb5" />
+				<s:RadioButton groupName="group" label="2 EUR" id="rb2" />
+				<s:RadioButton groupName="group" label="1 EUR" id="rb1" />			
+			</s:VGroup>
+			<s:Label width="100%" text="Po stisku tlačítka se spustí hra" />
+			<s:HGroup width="100%" horizontalAlign="center">
+				<s:Button width="40%" label="ZRUŠIT" click="goBack(event)" skinClass="skins.buttons.buttonGold"/>			
+				<s:Button width="40%" label="HRA" click="goPlay(event)" skinClass="skins.buttons.buttonGold"/>
+			</s:HGroup>
+	
+			
+		</s:VGroup>
+	</s:Scroller>
+</s:View>

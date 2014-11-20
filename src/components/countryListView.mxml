@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" add="addHandler(event)"
+		xmlns:s="library://ns.adobe.com/flex/spark" title="Země">
+	<s:navigationContent>
+		<s:HGroup paddingLeft="10">
+			<s:Button label="Close"  click="btnClose_clickHandler(event)"/>		
+		</s:HGroup>		
+	</s:navigationContent>
+	<s:actionContent>
+		<s:HGroup paddingRight="10">
+			<s:Button label="OK" click="btnUse_clickHandler(event)"/>		
+		</s:HGroup>		
+	</s:actionContent>
+	
+	<fx:Declarations>
+		<fx:XML source="components/seznamZemi.xml" xmlns="" id="myXML">
+		</fx:XML>
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			protected function btnClose_clickHandler(event:MouseEvent):void
+			{
+				navigator.popView();
+			}
+			
+			protected function btnUse_clickHandler(event:MouseEvent):void
+			{
+				var o:Object = li.selectedItem;
+				data.selectedCountry = (o.@label).toString();
+				navigator.popView();				
+			}
+			
+			
+			override public function createReturnObject():Object {
+				return data;
+			}
+			
+			
+			protected function addHandler(event:FlexEvent):void
+			{
+				for(var i:int = 0;i<li.dataProvider.length;i++) {
+					var o:Object = li.dataProvider.getItemAt(i);
+					var s:String = (o.@label).toString();
+					if (s == data.selectedCountry) {
+						li.selectedIndex = i;
+						break;
+					}
+				}
+			}
+			
+		]]>
+	</fx:Script>	
+	
+	<s:VGroup width="100%" height="100%" paddingTop="20" horizontalAlign="center">
+		
+
+		<s:List width="100%"  height="100%" id="li" labelField="@label" itemRenderer="components.CountryItemRenderer" > 
+			<s:dataProvider>
+				<s:XMLListCollection source="{myXML.children()}" />
+			</s:dataProvider>
+			<s:layout>
+				<s:VerticalLayout gap="0"   />
+			</s:layout>
+		</s:List>
+		
+	</s:VGroup>
+	
+	
+	
+</s:View>

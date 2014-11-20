@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnablePopUpContainer xmlns:fx="http://ns.adobe.com/mxml/2009"
+						   xmlns:s="library://ns.adobe.com/flex/spark"
+						   backgroundAlpha="0.95" initialize="init(event)"
+						   skinClass="skins.AlertSkin">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+
+			[Bindable]
+			private var taWidth:int;
+			
+			protected function init(event:FlexEvent):void
+			{
+				taWidth = stage.width - 100;
+			}
+		]]>
+	</fx:Script>
+	
+		<s:VGroup width="100%" gap="5" horizontalAlign="center" paddingBottom="8" paddingLeft="8" paddingRight="8" paddingTop="8">
+			<s:Label id="tWindow" fontWeight="bold" paddingBottom="10" paddingTop="10" text=""/>
+			<s:TextArea id="msg" x="35" width="{taWidth}" borderVisible="false"
+						contentBackgroundAlpha="0" skinClass="spark.skins.mobile.TextAreaSkin"
+						text=""
+						textAlign="center"/>
+			<s:HGroup width="{msg.width}" horizontalAlign="center">
+				<s:Button id="btOK" width="180" label="OK" click="close()" />
+				<s:Button id="btCancel" width="180" label="Zrušit" click="close()" />	
+			</s:HGroup>
+			<s:BusyIndicator id="bi" visible="false" includeInLayout="false" symbolColor="red"/>
+			
+		</s:VGroup>
+</s:SkinnablePopUpContainer>

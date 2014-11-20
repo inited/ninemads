@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hra:LoginBase xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:hra="hra.*" 
+			   add="addHandler(event)" 
+			   creationComplete="loginbase1_creationCompleteHandler(event)"
+		xmlns:s="library://ns.adobe.com/flex/spark" title="LOGIN" actionBarVisible="false" xmlns:components="components.*"
+		destructionPolicy="never"
+		>
+	
+	<fx:Declarations>
+		<s:DateTimeFormatter id="dtf" dateTimePattern="dd.MM.yyyy" />
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import components.DatumView;
+			import components.countryListView;
+			
+			import hra.Model;
+			
+			import mx.core.IVisualElement;
+			import mx.events.FlexEvent;
+			import mx.events.TouchInteractionEvent;
+			
+			import spark.events.IndexChangeEvent;	
+
+			private var registerLogin:Boolean = false;
+			
+			private var dt:Date;
+						
+			
+			protected function bbFiltr_changeHandler(event:IndexChangeEvent):void
+			{
+				trace("New index:" + event.newIndex);
+				if (event.newIndex == 0) {
+					vgLog.visible = true;
+					vgLog.includeInLayout = true;
+					vgReg.visible = false;
+					vgReg.includeInLayout = false;
+				} else {
+					vgLog.visible = false;
+					vgLog.includeInLayout = false;
+					vgReg.visible = true;
+					vgReg.includeInLayout = true;
+				}
+			}
+			
+			protected function openPopup(event:MouseEvent):void
+			{
+				navigator.pushView(DatumView, {selectedDate:dt});
+			}
+
+			
+			protected function txtBirthday_focusInHandler():void
+			{
+				trace("DAtum");
+				openPopup(null);
+			}
+
+			protected function txtBirthday_softKeyboardActivatingHandler(event:SoftKeyboardEvent):void
+			{
+				// TODO Auto-generated method stub
+				event.preventDefault();
+			}
+			
+			protected function addHandler(event:FlexEvent):void
+			{
+				trace("Add handler");
+				if (navigator.poppedViewReturnedObject == null) {
+					return;
+				}
+				
+				
+				// vracim se ze zadani datumu
+				dt = navigator.poppedViewReturnedObject.object.selectedDate as Date;
+				if (dt) {
+					txtBirthday.text = dtf.format(dt);
+				}
+				
+				var zeme:String = navigator.poppedViewReturnedObject.object.selectedCountry as String;
+				if (zeme) {
+					txtCountry.text = zeme;
+				} 
+			}
+			
+			
+			protected function loginbase1_creationCompleteHandler(event:FlexEvent):void
+			{
+				focusManager.setFocus(txtLoginUsername);
+			}
+			
+			protected function txtCountry_focusInHandler(event:FocusEvent):void
+			{
+				navigator.pushView(countryListView, {selectedCountry:txtCountry.text});
+			}
+			
+		]]>
+	</fx:Script>
+	
+
+
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	
+	
+	<s:VGroup  width="100%" height="100%" verticalAlign="top" paddingLeft="20" paddingRight="20" paddingTop="20">
+		
+		<s:ButtonBar width="100%" change="bbFiltr_changeHandler(event)" id="bbFiltr" selectedIndex="0" requireSelection="true" skinClass="skins.ButtonBarGold">
+			<s:ArrayCollection>
+				<fx:Object label="PŘIHLÁŠENÍ" value="{vgLog}"  />
+				<fx:Object label="REGISTRACE" value="{vgReg}"  />
+			</s:ArrayCollection>
+		</s:ButtonBar>	
+				
+		<s:Scroller id="scMain" width="100%" height="100%" verticalScrollPolicy="on" horizontalScrollPolicy="off">	
+			<s:HGroup>
+				<s:VGroup id="vgLog" width="{model.appWidth-40}" height="100%" paddingTop="10">
+					<s:Label width="100%" textAlign="left" text="Pokud již máte přihlašovací údaje" />
+					<s:TextInput skinClass="skins.TextEditDeleteSkin" focusAlpha="0" width="100%" id="txtLoginUsername" prompt="UŽIVATELSKÉ JMÉNO" softKeyboardType="email"/>
+					<s:TextInput skinClass="skins.TextEditDeleteSkin" focusAlpha="0" width="100%" id="txtLoginPassword" prompt="HESLO" softKeyboardType="email" displayAsPassword="true"/>
+					<s:Group width="100%">
+						<s:CheckBox id="cbPermamentLogin" label="ZŮSTAT TRVALE PŘIHLÁŠENI" skinClass="skins.CheckBoxGoldSkin" left="10"/>
+						<s:Button label="Přihlásit" right="0" click="goLogin()" skinClass="skins.buttons.buttonGold" />
+					</s:Group>
+				</s:VGroup>
+				<s:VGroup id="vgReg" width="{model.appWidth-40}" height="100%" paddingTop="10">
+					<s:Label width="100%" textAlign="left" text="Pokud jste nový a chcete se registrovat" />
+					<s:TextInput skinClass="skins.TextEditDeleteSkin" focusAlpha="0" width="100%" id="txtUsername" prompt="Uživatelské jméno - Nick" softKeyboardType="default"/>
+					<s:TextInput skinClass="skins.TextEditDeleteSkin" focusAlpha="0" width="100%" id="txtPassword" prompt="Heslo" displayAsPassword="true"/>
+					<s:TextInput skinClass="skins.TextEditDeleteSkin" focusAlpha="0" width="100%" id="txtPassword2" prompt="Heslo" displayAsPassword="true"/>
+					<s:Spacer width="10" height="10" />
+					<s:TextInput skinClass="skins.TextEditDeleteSkin" focusAlpha="0" width="100%" id="txtFullname" prompt="Jméno a příjmení"/>
+					<s:TextInput skinClass="skins.TextEditDeleteSkin" focusAlpha="0" width="100%" id="txtStreet" prompt="Ulice a číslo popisné"/>
+					<s:TextInput skinClass="skins.TextEditDeleteSkin" focusAlpha="0" width="100%" id="txtCity" prompt="Město"/>
+					<s:TextInput skinClass="skins.TextEditDeleteSkin" focusAlpha="0" width="100%" id="txtCountry" prompt="Země" focusIn="txtCountry_focusInHandler(event)"/>
+					
+					<s:Spacer width="10" height="10" />
+					<s:TextInput skinClass="skins.TextEditDeleteSkin" focusAlpha="0" width="100%" id="txtBirthday"  prompt="Datum narození"  focusIn="txtBirthday_focusInHandler()"/>
+	
+					<s:Spacer width="10" height="10" />
+					<s:TextInput skinClass="skins.TextEditDeleteSkin" focusAlpha="0" width="100%" id="txtEmail" prompt="E-mail" softKeyboardType="email"/>
+					<s:TextInput skinClass="skins.TextEditDeleteSkin" focusAlpha="0" width="100%" id="txtPhone" prompt="Telefon" softKeyboardType="contact"/>
+					
+					<s:Group width="100%">
+						<s:Button label="Registrovat" right="0"  click="goRegister()" skinClass="skins.buttons.buttonGold"/>
+					</s:Group>
+					<s:Spacer width="10" height="400" />
+				</s:VGroup>
+			</s:HGroup>
+		</s:Scroller>
+	</s:VGroup>
+</hra:LoginBase>

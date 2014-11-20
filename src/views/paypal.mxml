@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" add="view1_addHandler(event)" resize="stage_resizeHandler(event)"
+		backgroundColor="0x212121" removedFromStage="view1_removedFromStageHandler(event)"
+		xmlns:s="library://ns.adobe.com/flex/spark" title="GPS Sender" actionBarVisible="false">
+	
+
+	<fx:Script>
+		<![CDATA[
+			import hra.Model;
+			
+			import mx.events.FlexEvent;
+			
+			[Bindable]
+			public var model:Model = Model.getInstance();
+
+			public var webView:StageWebView = new StageWebView();
+			
+
+			protected function view1_addHandler(event:FlexEvent):void
+			{
+				webView.viewPort = new Rectangle( 0, 0, this.width, this.height);
+				webView.stage = this.stage;
+				webView.loadURL("http://ninemads27.appspot.com/paypal.html");			
+				
+				
+//				var v:URLVariables = new URLVariables();
+//				model.apiCall("paypalLink", v, gotLink);				
+			}
+			
+			
+			protected function goCharge2(event:MouseEvent):void
+			{
+			}
+			
+			protected function gotLink(res:Object):void {
+//				webView.viewPort = new Rectangle( 0, 0, stage.stageWidth, stage.stageHeight);
+				webView.viewPort = new Rectangle( 0, 0, this.width, this.height);
+				webView.stage = this.stage;
+//				webView.loadURL("https://www.sandbox.paypal.com/incontext?token=" + res.TOKEN);			
+				webView.loadURL("http://ninemads27.appspot.com/paypal.html");			
+				//webView.loadString("<html><body><form action='http://ninemads27.appspot.com/checkout.java' METHOD='POST'><input type='image' name='paypal_submit' id='paypal_submit'  src='https://www.paypal.com/en_US/i/btn/btn_dg_pay_w_paypal.gif' border='0' align='top' alt='Pay with PayPal'/></form><script src='https://www.paypalobjects.com/js/external/dg.js' type='text/javascript'></script><script>var dg = new PAYPAL.apps.DGFlow({trigger: 'paypal_submit',expType: 'instant'});</script></body></html>");
+			}
+			
+			private function stage_resizeHandler( event:Event ):void
+			{
+//				webView.viewPort = new Rectangle( 0, 0, stage.stageWidth, stage.fullScreenHeight);
+			}		
+
+
+			
+			protected function view1_removedFromStageHandler(event:Event):void
+			{
+				// TODO Auto-generated method stub
+				webView.dispose();
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	
+</s:View>

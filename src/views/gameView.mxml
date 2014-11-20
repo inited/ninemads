@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:s="library://ns.adobe.com/flex/spark"
+		actionBarVisible="false" tabBarVisible="false" title="HomeView"
+		initialize="init()" backKeyPressed="backButtonPressed(event)"
+		creationComplete="countDown()">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import hra.Model;
+			
+			import mx.collections.ArrayList;
+			import mx.events.FlexEvent;
+			
+			[Bindable]
+			private var model:Model = Model.getInstance();
+			
+			private var questionNumber:Number = 0;
+			public var questionArray:Array = ["3 × 3 = 9", "3 + 6 = 9", "3 + 4 = 7", "5 + 1 = 6", "7 + 2 = 9", "8 – 5 = 3", "2 + 6 = 8", "6 – 3 = 3", "4 + 5 = 9"];
+			private var answersArray:ArrayList = new ArrayList();
+			private var wait:Boolean = true;
+
+			private var cdA:int = 3; // odpocivac sekund 3,2,1,0
+			private var cdB:int = 0; // ctvrtky kruhu
+			private var aImages:Array = [c1, c2, c3, c4, c5];
+			
+			[Embed(source="images/c1.png")] 
+			[Bindable] 
+			public var c1:Class;
+			[Embed(source="images/c2.png")] 
+			[Bindable] 
+			public var c2:Class;
+			[Embed(source="images/c3.png")] 
+			[Bindable] 
+			public var c3:Class;
+			[Embed(source="images/c4.png")] 
+			[Bindable] 
+			public var c4:Class;
+			[Embed(source="images/c5.png")] 
+			[Bindable] 
+			public var c5:Class;
+			
+			private var timer:Timer;
+			private var countTimer:Timer;
+
+			
+			public var sfx:Sound = null;
+			
+			public var cImgNumber:Number = 1;
+			public var cNumber:Number = 3;
+
+			private var startTime:int;
+			
+			private var resultTime:int;
+			private var beginTime:int;
+			private var endTime:int;
+			
+			private var t:Timer;
+			
+			
+			private function init():void{
+				lbQuestion.visible = false;
+				lbTimer.text = "Čas: 0 sekund";
+				
+				t = new Timer(TIMER_INTERVAL);
+				t.addEventListener(TimerEvent.TIMER, updateTimer);
+				
+
+			}
+			
+			
+			
+			private function delayedCountDown():void 
+			{ 
+				setTimeout(counterStart, 500); 
+			}
+	
+
+			private function counterStart():void
+			{
+				countTimer.start()
+			}
+			
+			private function countDown():void{
+				setTimeout(function ():void {
+					cdA = 3;
+					cdB = 0;
+					countTimer = new Timer(250);
+					countTimer.addEventListener(TimerEvent.TIMER, onCountDownInterval);
+					countTimer.start();
+					if (model.soundOn) {
+						sfx = new model.soundShort() as Sound;
+						sfx.play();
+					}
+				}, 250);
+/*				
+*/				
+				return;
+				
+				startTime = new Date().time;
+				endTime = new Date().time + Number(3) * 1000;
+				countDownTimerDisplay.text = "3";
+				if(countTimer==null)
+					countTimer = new Timer(200);
+				countTimer.addEventListener(TimerEvent.TIMER, onCountDownInterval);
+				//countTimer.start();
+				//imgCount.source = c1;
+				delayedCountDown();
+				
+			}
+			
+
+			
+			private function onCountDownInterval(event:Event):void{
+				
+				if ((cdA == 0) && (cdB == 4)) {
+					countTimer.stop();
+					sfx = new model.soundLong() as Sound;
+					if (model.soundOn) {
+						sfx.play();
+					}
+					startGame();
+					return;
+				}
+				cdB++;
+				if (cdB > 4) {
+					cdB = 0;
+					cdA--;
+					countDownTimerDisplay.text = String(cdA);
+					if (model.soundOn) {
+						sfx.play();
+					}
+				}
+				imgCount1.visible = false;
+				imgCount2.visible = false;
+				imgCount3.visible = false;
+				imgCount4.visible = false;
+				imgCount5.visible = false;
+				switch(cdB) {
+					case 0:
+						imgCount1.visible = true;
+						break;
+					case 1:
+						imgCount2.visible = true;
+						break;
+					case 2:
+						imgCount3.visible = true;
+						break;
+					case 3:
+						imgCount4.visible = true;
+						break;
+					case 4:
+						imgCount5.visible = true;
+						break;
+				}
+				return;
+				
+				
+				var now:Number = new Date().time;
+				if(cNumber <= 0){
+					//countDownTimerDisplay.text = "Count Down Completed";
+					countTimer.stop();
+					//soundLong.play();
+					sfx = new model.soundLong() as Sound;
+					if (model.soundOn) {
+						sfx.play();
+					}
+					setTimeout(startGame, 650); 
+					//startGame();
+				}else{
+					//countDownTimerDisplay.text = Math.round((endTime - now)/1000).toString();
+					
+					switch (cImgNumber) {
+						case 1 :
+							imgCount.source = c1;
+							sfx = new model.soundShort() as Sound;
+							if (model.soundOn) {
+								sfx.play();
+							}
+							break
+						case 2 :
+							imgCount.source = c2;
+							break;
+						case 3 :
+							imgCount.source = c3;
+							break;
+						case 4 :
+							imgCount.source = c4;
+							break;
+						case 5 :
+							imgCount.source = c5;
+							cNumber --;
+							cImgNumber = 0;
+							countDownTimerDisplay.text = String(cNumber);
+							//sChannel = new soundCls().play(0, 0, new SoundTransform(vol, 0));
+							
+
+							//soundShort.play();
+							break;
+					}
+					cImgNumber ++;
+					
+
+				}
+			}
+			
+			private function mixQuestions():void {
+				var al:ArrayList = new ArrayList(questionArray);
+				var bl:ArrayList = new ArrayList();
+				for (var i:int = 9; i>0; i--) {
+					var j:int = Math.round( Math.random() * (i-1) );
+					bl.addItem(al.getItemAt(j));
+					al.removeItemAt(j);
+				}
+				questionArray = bl.toArray();
+			}
+	
+			
+			private function startGame():void{
+				gCount.includeInLayout = false;
+				gCount.visible = false;
+				gCountSpace.includeInLayout = false;
+				gCountSpace.visible = false;
+				
+//				mixQuestions();
+		
+				taInfo.visible = false;
+				countDownTimerDisplay.visible = false;
+				lbQuestion.text = vyberOtazku();
+				wait = false;
+				lbQuestion.visible = true;
+				//onStartTimer();
+				startTimer();
+			}
+			
+			
+			private function startGameByVideo():void{
+				if(questionNumber>0) return;
+				/*
+				vdCountDown.stop();
+				vdCountDown.visible = false;
+				vdCountDown.includeInLayout = false;
+				*/
+				taInfo.visible = false;
+				countDownTimerDisplay.visible = false;
+				lbQuestion.text = vyberOtazku();
+				wait = false;
+				lbQuestion.visible = true;
+				startTimer();
+			}
+			
+			private function nextQuestion():void{
+				
+			}
+			
+			private function vyberOtazku():String{
+				var q:String = String(questionArray[questionNumber]).split("=")[0] + "= ";
+				questionNumber ++;
+				return q;				
+			}
+			
+			private function putIn(event:Event):void
+			{
+				if(wait) return;
+				lbQuestion.text = String(lbQuestion.text) + event.currentTarget.label;
+				wait = true;
+
+				// zachyt odpoved
+				if(questionNumber>0)
+				{
+					answersArray.addItemAt(lbQuestion.text,questionNumber-1);
+				}
+				
+				// konec?
+				if(questionNumber>8)
+				{
+					stopTimer();
+					setTimeout(function ():void {
+						var o:Object = new Object();
+						o.answersArray = answersArray;
+						o.questionArray = questionArray;
+						o.cas = lbTimer.text;
+						o.resultTime = resultTime;
+						navigator.replaceView(gameResultsView, o);
+					}, 300);
+					return;
+				}
+				
+				setTimeout(function ():void {
+					lbQuestion.text = vyberOtazku();
+					wait = false;					
+				}, 300);
+				
+
+				
+				//event.currentTarget.label
+			}
+			
+			private function trigger():void { setTimeout(doIt, 300); }
+			private function doIt():void    { nextQuestion(); }
+			
+
+			
+			import flash.events.TimerEvent;
+			import flash.utils.Timer;
+			
+			private const MIN_MASK:String = "00";
+			private const SEC_MASK:String = "00";
+			private const MS_MASK:String = "000";
+			private const TIMER_INTERVAL:int = 10;
+			
+			
+
+			
+			private function updateTimer(evt:TimerEvent):void {
+				endTime = getTimer();
+				resultTime = endTime - beginTime;
+				
+				var d:Date = new Date(resultTime);
+				var sec:String = (d.minutes * 60 + d.seconds).toString();
+				var ms:String = String(MS_MASK + d.milliseconds).substr(-MS_MASK.length);
+				lbTimer.text = "Čas: " + String(sec + "." + ms) + " sekund";
+			}
+			
+			private function startTimer():void {
+				beginTime = getTimer();
+				t.start();
+			}
+			
+			private function stopTimer():void {
+				t.stop();
+			}
+			
+			protected function backButtonPressed(event:FlexEvent):void
+			{
+				// Zadne tlacitko zpet v prubehu hry
+				event.cancelable;
+				event.preventDefault();
+			}
+						
+		]]>
+	</fx:Script>
+	
+
+	<s:VGroup width="100%" height="100%" gap="0">
+		<s:VGroup width="100%" height="50%" horizontalAlign="center">
+			<s:Spacer height="10%"/>
+			<s:TextArea id="taInfo" width="80%" height="74" maxWidth="650" borderVisible="false"
+						contentBackgroundColor="0xFFFFFF" editable="false" fontSize="20"
+						fontWeight="bold" skinClass="spark.skins.mobile.TextAreaSkin"
+						styleName="ophdText"
+						text="Odpověz co nejrychleji!&#xd;Hraješ o všechno!!!"
+						textAlign="center"/>
+			
+			<s:Spacer id="gCountSpace" height="5%" />
+			<s:Group id="gCount" width="20%" height="{gCount.width}">
+				<s:Image width="100%" height="100%" id="imgCount1" fillMode="scale" source="{c1}"/>
+				<s:Image width="100%" height="100%" id="imgCount2" fillMode="scale" source="{c2}"/>
+				<s:Image width="100%" height="100%" id="imgCount3" fillMode="scale" source="{c3}"/>
+				<s:Image width="100%" height="100%" id="imgCount4" fillMode="scale" source="{c4}"/>
+				<s:Image width="100%" height="100%" id="imgCount5" fillMode="scale" source="{c5}"/>
+				<s:Label id="countDownTimerDisplay" width="100%" height="100%" color="#FFFFFF"
+						 fontFamily="Arial" fontSize="30" fontWeight="bold" text="3"
+						 textAlign="center" verticalAlign="middle"/>
+			</s:Group>
+
+
+			
+			<s:Label id="lbQuestion" width="304" color="0xFF0000" fontSize="70"
+					 fontWeight="bold" text="4 - 2 =" textAlign="center"/>
+		</s:VGroup>
+
+		
+		<s:VGroup width="100%" height="50%" gap="0">
+			<s:HGroup width="100%" height="20%" gap="0">
+				<s:Spacer width="10%"/>
+				<s:Button width="20%" height="100%" fontSize="30" label="7" click="putIn(event)" skinClass="skins.buttonNumbers"/>
+				<s:Spacer width="10%"/>
+				<s:Button width="20%" height="100%" fontSize="30" label="8" click="putIn(event)" skinClass="skins.buttonNumbers"/>
+				<s:Spacer width="10%"/>
+				<s:Button width="20%" height="100%" fontSize="30" label="9" click="putIn(event)" skinClass="skins.buttonNumbers"/>
+				<s:Spacer width="10%"/>
+			</s:HGroup>
+			<s:Spacer height="10%" />
+			<s:HGroup width="100%" height="20%" gap="0">
+				<s:Spacer width="10%"/>
+				<s:Button width="20%" height="100%" fontSize="30" label="4" click="putIn(event)" skinClass="skins.buttonNumbers"/>
+				<s:Spacer width="10%"/>
+				<s:Button width="20%" height="100%" fontSize="30" label="5" click="putIn(event)" skinClass="skins.buttonNumbers"/>
+				<s:Spacer width="10%"/>
+				<s:Button width="20%" height="100%" fontSize="30" label="6" click="putIn(event)" skinClass="skins.buttonNumbers"/>
+				<s:Spacer width="10%"/>
+			</s:HGroup>
+			<s:Spacer height="10%" />
+			<s:HGroup width="100%" height="20%" gap="0">
+				<s:Spacer width="10%"/>
+				<s:Button width="20%" height="100%" fontSize="30" label="1" click="putIn(event)" skinClass="skins.buttonNumbers"/>
+				<s:Spacer width="10%"/>
+				<s:Button width="20%" height="100%" fontSize="30" label="2" click="putIn(event)" skinClass="skins.buttonNumbers"/>
+				<s:Spacer width="10%"/>
+				<s:Button width="20%" height="100%" fontSize="30" label="3" click="putIn(event)" skinClass="skins.buttonNumbers"/>
+				<s:Spacer width="10%"/>
+			</s:HGroup>
+			<s:Spacer height="10%" />
+			<s:VGroup width="100%" height="20%" horizontalAlign="center" verticalAlign="middle">
+				<s:Label id="lbTimer" fontSize="20" fontWeight="bold" color="0xf3eb44"
+						 text="Čas: 0.000 sekund"
+						 paddingBottom="3" paddingLeft="5" paddingRight="5" paddingTop="8"/>
+			</s:VGroup>
+		</s:VGroup>
+		
+
+	</s:VGroup>
+
+</s:View>
